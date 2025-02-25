@@ -56,13 +56,6 @@ sed -i '/fnm/d' ~/.zshrc || true
 
 # --- Undo Zsh and Oh-My-Zsh setup ---
 echo "Restoring shell configuration..."
-# If you made a backup of your original .zshrc (e.g. .zshrc.backup), restore it.
-if [[ -f ~/.zshrc.backup ]]; then
-  mv ~/.zshrc.backup ~/.zshrc
-  echo "Restored your previous .zshrc from backup."
-fi
-# Remove oh-my-zsh directory if it exists
-rm -rf ~/.oh-my-zsh || true
 # Change the default shell back to bash
 chsh -s /bin/bash
 
