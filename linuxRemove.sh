@@ -54,10 +54,6 @@ rm -rf ~/.fnm || true
 sed -i '/fnm/d' ~/.bashrc || true
 sed -i '/fnm/d' ~/.zshrc || true
 
-# --- Undo Zsh and Oh-My-Zsh setup ---
-echo "Restoring shell configuration..."
-# Change the default shell back to bash
-chsh -s /bin/bash
 
 echo "Removing Zsh package..."
 sudo apt-get remove --purge -y zsh || true
