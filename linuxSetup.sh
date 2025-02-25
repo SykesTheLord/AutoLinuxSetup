@@ -42,7 +42,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     # Install PowerShell
     sudo apt-get install -y powershell
 
-elif [["$DISTRO" == "Debian"]]; then
+elif [[ "$DISTRO" == "Debian" ]]; then
     # Install pre-requisite packages.
     sudo apt-get install -y wget
     # Add Docker's official GPG key:
