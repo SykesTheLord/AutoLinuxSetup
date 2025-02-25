@@ -120,7 +120,7 @@ chmod +x ./bicep
 sudo mv ./bicep /usr/local/bin/bicep
 
 # Install and setup Neovim
-wget -O - https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | sh
+wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
 
 # Download and install fnm:
 curl -o- https://fnm.vercel.app/install | bash
