@@ -100,6 +100,7 @@ sudo apt-get install clangd-12 -y # Install Clangd for C and C++ development
 sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
 sudo apt install default-jre -y # Install openjdk jre
 sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
+sudo apt install npm -y # Install npm
 
 ## Install Terraform
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
