@@ -137,24 +137,20 @@ npm -v # Should print "10.9.2".
 
 ## Install Zsh and set it as default shell.
 sudo apt install zsh -y
-chsh -s $(which zsh)
+
 
 # Install Oh-My-Zsh
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Install Oh-My-Zsh plugins
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
 wget -O .zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 
-# Refresh Zsh
-source .zshrc
+chsh -s $(which zsh)
 
 ## Install Terraform autocomplete
 terraform -install-autocomplete
-
-# Refresh Zsh
-source .zshrc
 
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
