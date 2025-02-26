@@ -96,11 +96,12 @@ sudo usermod -aG docker $USER
 
 sudo apt update # Update the system
 sudo apt upgrade -y  # Upgrade the system
-sudo apt-get install clangd-12 -y # Install Clangd for C and C++ development
+sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
 sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
 sudo apt install default-jre -y # Install openjdk jre
 sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
 sudo apt install npm -y # Install npm
+sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
 
 ## Install Terraform
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
@@ -154,4 +155,5 @@ chsh -s $(which zsh)
 ## Install Terraform autocomplete
 terraform -install-autocomplete
 
+# Install Azure Shell
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
