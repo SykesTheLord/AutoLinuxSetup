@@ -103,7 +103,7 @@ sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
 sudo apt install npm -y # Install npm
 sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
 
-
+wget -O go1.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.0.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 
