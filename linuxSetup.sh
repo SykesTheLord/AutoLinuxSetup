@@ -2,6 +2,11 @@
 
 DISTRO=$(lsb_release -is 2>/dev/null)
 
+print_message() {
+    echo "================================================="
+    echo "$1"
+    echo "================================================="
+}
 
 if [[ "$DISTRO" == "Ubuntu" ]]; then
     # Install pre-requisite packages.
@@ -42,6 +47,15 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     # Install PowerShell
     sudo apt-get install -y powershell
 
+    sudo apt update # Update the system
+    sudo apt upgrade -y  # Upgrade the system
+    sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
+    sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
+    sudo apt install default-jre -y # Install openjdk jre
+    sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
+    sudo apt install npm -y # Install npm
+    sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
+
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Install pre-requisite packages.
     sudo apt-get install -y wget
@@ -80,6 +94,26 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     ###################################
     # Install PowerShell
     sudo apt-get install -y powershell
+
+
+    sudo apt update # Update the system
+    sudo apt upgrade -y  # Upgrade the system
+    sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
+    sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
+    sudo apt install default-jre -y # Install openjdk jre
+    sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
+    sudo apt install npm -y # Install npm
+    sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
+
+elif [ -f "/etc/arch-release" ]; then
+
+    sudo pacman -S zsh --noconfirm
+    sudo pacman -S docker docker-compose --noconfirm
+    sudo systemctl enable docker.service
+    sudo pacman -S dotnet-runtime-8.0 dotnet-sdk-8.0 --noconfirm
+    sleep 10
+    dotnet tool install --global PowerShell
+
 else
     echo "No supported Distro for install found"
     exit 1
@@ -94,29 +128,34 @@ else
 fi
 sudo usermod -aG docker $USER
 
-sudo apt update # Update the system
-sudo apt upgrade -y  # Upgrade the system
-sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
-sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
-sudo apt install default-jre -y # Install openjdk jre
-sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
-sudo apt install npm -y # Install npm
-sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
 
-wget -O go1.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.0.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
 
-## Install Terraform
-sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-wget -O- https://apt.releases.hashicorp.com/gpg | \
-    gpg --dearmor | \
-sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-    sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update
-sudo apt-get install terraform -y
+
+if [ -f "/etc/arch-release" ]; then
+
+    sudo pacman -S terraform --noconfirm
+
+else
+    
+    wget -O go0.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go0.24.0.linux-amd64.tar.gz
+    export PATH=$PATH:/usr/local/go/bin
+    ## Install Terraform
+    sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+    wget -O- https://apt.releases.hashicorp.com/gpg | \
+        gpg --dearmor | \
+    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+        sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update
+    sudo apt-get install terraform -y
+    sudo apt install zsh -y
+fi
+
+
+
+
 
 # Fetch the latest Bicep CLI binary
 curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
@@ -142,7 +181,7 @@ npm -v # Should print "10.9.2".
 
 
 ## Install Zsh and set it as default shell.
-sudo apt install zsh -y
+
 
 
 # Install Oh-My-Zsh
@@ -154,10 +193,11 @@ zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUST
 
 wget -O .zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 
-chsh -s $(which zsh)
 
 ## Install Terraform autocomplete
 terraform -install-autocomplete
 
 # Install Azure Shell
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
+
+print_message "Now run chsh -s \$(which zsh)"
