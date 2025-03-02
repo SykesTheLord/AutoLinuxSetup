@@ -146,13 +146,6 @@ fnm install 22
 node -v
 npm -v
 
-# Install Oh-My-Zsh
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install Oh-My-Zsh plugins
-zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 
 # Install Terraform autocomplete
@@ -161,4 +154,14 @@ terraform -install-autocomplete
 # Install Azure Shell module
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
 
-print_message "Now run chsh -s \$(which zsh)"
+# Install Oh-My-Zsh
+wget -O installZsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sh installZsh.sh --unnattended --keep-zshrc
+sleep 30
+rm -f installZsh.sh
+
+# Install Oh-My-Zsh plugins
+zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+
+print_message "Now run source .zshrc. If errors occur"
