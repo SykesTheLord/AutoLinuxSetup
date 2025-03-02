@@ -84,13 +84,17 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y wget curl ca-certificates
     sudo zypper install -y docker docker-compose
     sudo systemctl enable docker && sudo systemctl start docker
+    sudo zypper install libicu
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     sudo wget -O /etc/zypp/repos.d/microsoft-prod.repo https://packages.microsoft.com/config/opensuse/15/prod.repo
     sudo zypper refresh
-    sudo zypper install -y powershell
-    sudo zypper install -y dotnet-sdk-8.0
     sudo zypper install -y clang clang-tools-extra
-    sudo zypper install -y nodejs npm
+    sudo zypper install -y nodejs22 npm22
     sudo zypper install -y zsh
+    sudo zypper install dotnet-sdk-8.0
+    sudo zypper install aspnetcore-runtime-8.0
+    sudo dotnet tool install --global powershell
+    firefox https://developer.hashicorp.com/terraform/install
 
 else
     echo "No supported Distro for install found"
@@ -163,5 +167,8 @@ rm -f installZsh.sh
 # Install Oh-My-Zsh plugins
 zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+
+# Open Jetbrains for toolbox link
+firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 
 print_message "Now run source .zshrc. If errors occur"
