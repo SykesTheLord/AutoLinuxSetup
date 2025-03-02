@@ -156,7 +156,7 @@ pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
 
 # Install Oh-My-Zsh
 wget -O installZsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-sh installZsh.sh --unnattended --keep-zshrc --skip-chsh
+sh installZsh.sh --unattended --keep-zshrc --skip-chsh
 sleep 30
 rm -f installZsh.sh
 
