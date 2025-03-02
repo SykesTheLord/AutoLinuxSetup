@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Determine the distribution
 DISTRO=$(lsb_release -is 2>/dev/null)
 
 print_message() {
@@ -9,116 +10,94 @@ print_message() {
 }
 
 if [[ "$DISTRO" == "Ubuntu" ]]; then
-    # Install pre-requisite packages.
+    # Ubuntu setup
     sudo apt-get install -y wget apt-transport-https software-properties-common
-    # Add Docker's official GPG key:
     sudo apt-get update
-    sudo apt-get install ca-certificates curl
+    sudo apt-get install -y ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-        $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
-
-    # Install Docker elements
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-    # Get the version of Ubuntu
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     source /etc/os-release
-
-    # Download the Microsoft repository keys
     wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
-
-    # Register the Microsoft repository keys
     sudo dpkg -i packages-microsoft-prod.deb
-
-    # Delete the Microsoft repository keys file
     rm packages-microsoft-prod.deb
-
-    # Update the list of packages after we added packages.microsoft.com
     sudo apt-get update
-
-    ###################################
-    # Install PowerShell
     sudo apt-get install -y powershell
-
-    sudo apt update # Update the system
-    sudo apt upgrade -y  # Upgrade the system
-    sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
-    sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
-    sudo apt install default-jre -y # Install openjdk jre
-    sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
-    sudo apt install npm -y # Install npm
-    sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
+    sudo apt update && sudo apt upgrade -y
+    sudo apt-get install -y clangd-19
+    sudo apt-get install -y dotnet-sdk-8.0
+    sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
 
 elif [[ "$DISTRO" == "Debian" ]]; then
-    # Install pre-requisite packages.
+    # Debian setup
     sudo apt-get install -y wget
-    # Add Docker's official GPG key:
     sudo apt-get update
-    sudo apt-get install ca-certificates curl
+    sudo apt-get install -y ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
-
-    # Install Docker elements
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-    # Get the version of Debian
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     source /etc/os-release
-
-    # Download the Microsoft repository GPG keys
     wget -q https://packages.microsoft.com/config/debian/$VERSION_ID/packages-microsoft-prod.deb
-
-    # Register the Microsoft repository GPG keys
     sudo dpkg -i packages-microsoft-prod.deb
-
-    # Delete the Microsoft repository GPG keys file
     rm packages-microsoft-prod.deb
-
-    # Update the list of packages after we added packages.microsoft.com
     sudo apt-get update
-
-    ###################################
-    # Install PowerShell
     sudo apt-get install -y powershell
-
-
-    sudo apt update # Update the system
-    sudo apt upgrade -y  # Upgrade the system
-    sudo apt-get install clangd-19 -y # Install Clangd for C and C++ development
-    sudo apt-get install -y dotnet-sdk-8.0 # Install dotnet
-    sudo apt install default-jre -y # Install openjdk jre
-    sudo apt install openjdk-8-jre -y # Install openjdk 8 jre
-    sudo apt install npm -y # Install npm
-    sudo apt install openjdk-19-jre -y # Install Openjdk 19 runtime env
+    sudo apt update && sudo apt upgrade -y
+    sudo apt-get install -y clangd-19
+    sudo apt-get install -y dotnet-sdk-8.0
+    sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
 
 elif [ -f "/etc/arch-release" ]; then
-
-    sudo pacman -S zsh --noconfirm
-    sudo pacman -S docker docker-compose --noconfirm
+    # Arch Linux setup
+    sudo pacman -S --noconfirm zsh docker docker-compose
     sudo systemctl enable docker.service
-    sudo pacman -S dotnet-runtime-8.0 dotnet-sdk-8.0 --noconfirm
+    sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
     sleep 10
     dotnet tool install --global PowerShell
+
+elif [ -f "/etc/fedora-release" ]; then
+    # Fedora setup
+    print_message "Setting up for Fedora"
+    sudo dnf install -y wget curl ca-certificates dnf-plugins-core
+    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl enable --now docker
+    sudo rpm -Uvh https://packages.microsoft.com/config/fedora/$(rpm -E %fedora)/packages-microsoft-prod.rpm
+    sudo dnf update -y
+    sudo dnf install -y powershell dotnet-sdk-8.0 dotnet-runtime-8.0
+    sudo dnf install -y clang clang-tools-extra
+    sudo dnf install -y nodejs npm
+    sudo dnf install -y zsh
+
+elif grep -qi "opensuse" /etc/os-release; then
+    # openSUSE setup
+    print_message "Setting up for openSUSE"
+    sudo zypper refresh
+    sudo zypper install -y wget curl ca-certificates
+    sudo zypper install -y docker docker-compose
+    sudo systemctl enable docker && sudo systemctl start docker
+    sudo wget -O /etc/zypp/repos.d/microsoft-prod.repo https://packages.microsoft.com/config/opensuse/15/prod.repo
+    sudo zypper refresh
+    sudo zypper install -y powershell
+    sudo zypper install -y dotnet-sdk-8.0
+    sudo zypper install -y clang clang-tools-extra
+    sudo zypper install -y nodejs npm
+    sudo zypper install -y zsh
 
 else
     echo "No supported Distro for install found"
     exit 1
 fi
 
+# Docker group setup
 if ! getent group docker > /dev/null; then
     echo "Group 'docker' does not exist. Creating it now..."
     sudo groupadd docker
@@ -128,76 +107,58 @@ else
 fi
 sudo usermod -aG docker $USER
 
-
-
-
+# Terraform installation
 if [ -f "/etc/arch-release" ]; then
-
-    sudo pacman -S terraform --noconfirm
-
-else
-    
+    sudo pacman -S --noconfirm terraform
+elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
     wget -O go0.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go0.24.0.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
-    ## Install Terraform
     sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-    wget -O- https://apt.releases.hashicorp.com/gpg | \
-        gpg --dearmor | \
-    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-        sudo tee /etc/apt/sources.list.d/hashicorp.list
+    wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
     sudo apt update
-    sudo apt-get install terraform -y
-    sudo apt install zsh -y
+    sudo apt-get install -y terraform
+elif [ -f "/etc/fedora-release" ]; then
+    sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+    sudo dnf install -y terraform
+elif grep -qi "opensuse" /etc/os-release; then
+    sudo zypper addrepo -f https://rpm.releases.hashicorp.com/opensuse/hashicorp.repo
+    sudo zypper refresh
+    sudo zypper install -y terraform
 fi
-
-
-
-
 
 # Fetch the latest Bicep CLI binary
 curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-# Mark it as executable
 chmod +x ./bicep
-# Add bicep to  PATH 
 sudo mv ./bicep /usr/local/bin/bicep
 
-# Install and setup Neovim
-wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
+# Install and setup Neovim using the local NvimSetup.sh
+bash ./NvimSetup.sh
 
-# Download and install fnm:
+# Download and install fnm
 curl -o- https://fnm.vercel.app/install | bash
 
-# Download and install Node.js:
+# Download and install Node.js version 22 via fnm
 fnm install 22
 
-# Verify the Node.js version:
-node -v # Should print "v22.14.0".
-
-# Verify npm version:
-npm -v # Should print "10.9.2".
-
-
-## Install Zsh and set it as default shell.
-
-
+# Verify installations
+node -v
+npm -v
 
 # Install Oh-My-Zsh
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Install Oh-My-Zsh plugins
-zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions"
+zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions.git \$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
-wget -O .zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
+wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 
-
-## Install Terraform autocomplete
+# Install Terraform autocomplete
 terraform -install-autocomplete
 
-# Install Azure Shell
+# Install Azure Shell module
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
 
 print_message "Now run chsh -s \$(which zsh)"
