@@ -84,6 +84,8 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y wget curl ca-certificates
     sudo zypper install -y docker docker-compose
     sudo systemctl enable docker && sudo systemctl start docker
+    sudo zypper addrepo https://download.opensuse.org/repositories/SUSE:SLE-15:Update/pool/SUSE:SLE-15:Update.repo
+    sudo zypper refresh
     sudo zypper install libicu
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     sudo wget -O /etc/zypp/repos.d/microsoft-prod.repo https://packages.microsoft.com/config/opensuse/15/prod.repo
