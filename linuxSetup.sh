@@ -72,7 +72,7 @@ elif [ -f "/etc/arch-release" ]; then
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
     print_message "Setting up for Fedora"
-    sudo dnf install -y wget curl ca-certificates dnf-plugins-core
+    sudo dnf install -y wget curl ca-certificates dnf-plugins-core python3-pip
     sudo dnf update -y
     sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
