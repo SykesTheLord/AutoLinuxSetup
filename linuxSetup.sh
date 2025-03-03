@@ -81,6 +81,7 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dnf install -y dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0
     sudo dnf install -y clang clang-tools-extra
     sudo dnf module install -y nodejs:18/common
+    sudo dnf install -y npm18
     sudo dnf install -y zsh
     sudo dotnet tool install --global PowerShell
 
@@ -101,7 +102,7 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo wget -O /etc/zypp/repos.d/microsoft-prod.repo https://packages.microsoft.com/config/opensuse/15/prod.repo
     sudo zypper refresh
     sudo zypper install -y clang clang-tools-extra
-    sudo zypper install -y nodejs22 npm22
+    sudo zypper install -y nodejs18 npm18
     sudo zypper install -y zsh
     sudo zypper install dotnet-sdk-8.0
     sudo zypper install aspnetcore-runtime-8.0
