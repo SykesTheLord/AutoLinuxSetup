@@ -11,6 +11,8 @@ print_message() {
 
 if [[ "$DISTRO" == "Ubuntu" ]]; then
     # Ubuntu setup
+    print_message "Setting up for Ubuntu"
+    sudo apt update && sudo apt upgrade -y
     sudo apt-get install -y wget apt-transport-https software-properties-common
     sudo apt-get update
     sudo apt-get install -y ca-certificates curl
@@ -34,6 +36,8 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
+    print_message "Setting up for Debian"
+    sudo apt update && sudo apt upgrade -y
     sudo apt-get install -y wget
     sudo apt-get update
     sudo apt-get install -y ca-certificates curl
@@ -57,25 +61,28 @@ elif [[ "$DISTRO" == "Debian" ]]; then
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
+    print_message "Setting up for Arch"
+    sudo pacman -Syu --noconfirm
     sudo pacman -S --noconfirm zsh docker docker-compose
     sudo systemctl enable docker.service
     sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
     sleep 10
-    dotnet tool install --global PowerShell
+    sudo dotnet tool install --global PowerShell
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
     print_message "Setting up for Fedora"
     sudo dnf install -y wget curl ca-certificates dnf-plugins-core
+    sudo dnf update -y
     sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     sudo systemctl enable --now docker
     sudo rpm -Uvh https://packages.microsoft.com/config/fedora/$(rpm -E %fedora)/packages-microsoft-prod.rpm
-    sudo dnf update -y
-    sudo dnf install -y powershell dotnet-sdk-8.0 dotnet-runtime-8.0
+    sudo dnf install -y dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0
     sudo dnf install -y clang clang-tools-extra
-    sudo dnf install -y nodejs npm
+    sudo dnf module install -y nodejs:18/common
     sudo dnf install -y zsh
+    sudo dotnet tool install --global PowerShell
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -144,16 +151,6 @@ sudo mv ./bicep /usr/local/bin/bicep
 # Install and setup Neovim using the local NvimSetup.sh
 wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
 
-# Download and install fnm
-curl -o- https://fnm.vercel.app/install | bash
-
-# Download and install Node.js version 22 via fnm
-fnm install 22
-
-# Verify installations
-node -v
-npm -v
-
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 
 # Install Terraform autocomplete
@@ -175,4 +172,4 @@ zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:
 # Open Jetbrains for toolbox link
 firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 
-print_message "Now run source .zshrc. If errors occur"
+print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'. If errors occur"
