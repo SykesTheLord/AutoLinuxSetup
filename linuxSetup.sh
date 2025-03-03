@@ -84,7 +84,9 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y wget curl ca-certificates
     sudo zypper install -y docker docker-compose
     sudo systemctl enable docker && sudo systemctl start docker
-    sudo zypper addrepo https://download.opensuse.org/repositories/SUSE:SLE-15:Update/pool/SUSE:SLE-15:Update.repo
+    sudo zypper addrepo https://download.opensuse.org/repositories/home:Mir_ppc:openssl1.0.1/openSUSE_Tumbleweed/home:Mir_ppc:openssl1.0.1.repo
+    sudo zypper refresh
+    sudo zypper install libopenssl1_0_0
     sudo zypper refresh
     sudo zypper install libicu
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
