@@ -100,6 +100,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vim="nvim"
+alias upNvim="bash ~/.config/updateNeovimConf.sh"
+
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -111,3 +113,6 @@ if [ -d "$FNM_PATH" ]; then
   export PATH="/home/jasb/.local/share/fnm:$PATH"
   eval "`fnm env`"
 fi
+
+# Enable direnv
+eval "$(direnv hook zsh)"
