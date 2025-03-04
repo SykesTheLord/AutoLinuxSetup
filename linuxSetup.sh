@@ -154,6 +154,8 @@ sudo mv ./bicep /usr/local/bin/bicep
 wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
+wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
+
 
 # Install Terraform autocomplete
 terraform -install-autocomplete
