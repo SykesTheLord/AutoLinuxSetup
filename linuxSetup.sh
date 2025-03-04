@@ -33,6 +33,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt-get install -y clangd-19
     sudo apt-get install -y dotnet-sdk-8.0
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
+    sudo apt install -y ripgrep
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -58,6 +59,7 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt-get install -y clangd-19
     sudo apt-get install -y dotnet-sdk-8.0
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
+    sudo apt install -y ripgrep
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -68,6 +70,8 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
     sleep 10
     sudo dotnet tool install --global PowerShell
+    sudo pacman -S --noconfirm ripgrep
+
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -84,6 +88,7 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dnf install -y npm18
     sudo dnf install -y zsh
     sudo dotnet tool install --global PowerShell
+    sudo dnf install -y ripgrep
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -104,10 +109,11 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y clang clang-tools-extra
     sudo zypper install -y nodejs18 npm18
     sudo zypper install -y zsh
-    sudo zypper install dotnet-sdk-8.0
-    sudo zypper install aspnetcore-runtime-8.0
+    sudo zypper install -y dotnet-sdk-8.0
+    sudo zypper install -y aspnetcore-runtime-8.0
     sudo dotnet tool install --global powershell
     firefox https://developer.hashicorp.com/terraform/install
+    sudo zypper install -y ripgrep
 
 else
     echo "No supported Distro for install found"
