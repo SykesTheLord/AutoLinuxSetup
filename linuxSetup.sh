@@ -165,8 +165,8 @@ chmod +x ./bicep
 sudo mv ./bicep /usr/local/bin/bicep
 
 # Install and setup Neovim using the local NvimSetup.sh
-wget https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh
-bash NvimSetup.sh &
+wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash NvimSetup.sh 
+
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
