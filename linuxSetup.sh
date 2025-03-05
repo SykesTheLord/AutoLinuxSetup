@@ -94,7 +94,8 @@ elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
     print_message "Setting up for openSUSE"
     sudo zypper refresh
-    sudo zypper --non-interactive patch --auto-agree-with-license
+    sudo zypper dup -y
+    sudo zypper --non-interactive patch
     sudo zypper install -y wget curl ca-certificates
     sudo zypper install -y docker docker-compose
     sudo systemctl enable docker && sudo systemctl start docker
