@@ -100,9 +100,13 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y docker docker-compose
     sudo systemctl enable docker && sudo systemctl start docker
     if grep -qi "opensuse leap 15.6" /etc/os-release; then
-        sudo zypper addrepo https://download.opensuse.org/repositories/home:MaxxedSUSE:Compiler-Tools-15.6/15.6/home:MaxxedSUSE:Compiler-Tools-15.6.repo | echo 'a'
+        wget -O libopenssl1_0_0-1.0.2u-lp156.133.5.x86_64.rpm https://download.opensuse.org/repositories/home:/MaxxedSUSE:/Compiler-Tools-15.6/15.6/x86_64/libopenssl1_0_0-1.0.2u-lp156.133.5.x86_64.rpm
+        sudo rpm -i libopenssl1_0_0-1.0.2u-lp156.133.5.x86_64.rpm
+        rm -f libopenssl1_0_0-1.0.2u-lp156.133.5.x86_64.rpm
     else
-        sudo zypper addrepo https://download.opensuse.org/repositories/home:ohollmann:branches:security:tls/openSUSE_Tumbleweed/home:ohollmann:branches:security:tls.repo | echo 'a'
+        wget -O libopenssl1_0_0-1.0.2u-security.146.64.x86_64.rpm https://download.opensuse.org/repositories/home:/ohollmann:/branches:/security:/tls/openSUSE_Tumbleweed/x86_64/libopenssl1_0_0-1.0.2u-security.146.64.x86_64.rpm
+        sudo rpm -i libopenssl1_0_0-1.0.2u-security.146.64.x86_64.rpm
+        rm -f libopenssl1_0_0-1.0.2u-security.146.64.x86_64.rpm
     fi
     sudo zypper refresh
     sudo zypper install libopenssl1_0_0
