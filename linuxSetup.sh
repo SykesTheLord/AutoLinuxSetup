@@ -34,6 +34,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt-get install -y dotnet-sdk-8.0
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
     sudo apt install -y ripgrep
+    sudo apt install -y direnv
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -60,6 +61,7 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt-get install -y dotnet-sdk-8.0
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
     sudo apt install -y ripgrep
+    sudo apt install -y direnv
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -71,7 +73,7 @@ elif [ -f "/etc/arch-release" ]; then
     sleep 10
     sudo dotnet tool install --global PowerShell
     sudo pacman -S --noconfirm ripgrep
-
+    sudo pacman -S --noconfirm direnv
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -89,6 +91,7 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dnf install -y zsh
     sudo dotnet tool install --global PowerShell
     sudo dnf install -y ripgrep
+    sudo dnf install -y direnv
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -121,6 +124,7 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo dotnet tool install --global powershell
     firefox https://developer.hashicorp.com/terraform/install
     sudo zypper install -y ripgrep
+    sudo zypper install -y direnv
 
 else
     echo "No supported Distro for install found"
