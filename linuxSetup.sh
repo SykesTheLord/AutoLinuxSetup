@@ -122,7 +122,6 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y dotnet-sdk-8.0
     sudo zypper install -y aspnetcore-runtime-8.0
     sudo dotnet tool install --global powershell
-    firefox https://developer.hashicorp.com/terraform/install
     sudo zypper install -y ripgrep
     sudo zypper install -y direnv
 
@@ -156,10 +155,8 @@ elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
 elif [ -f "/etc/fedora-release" ]; then
     sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
     sudo dnf install -y terraform
-elif grep -qi "opensuse" /etc/os-release; then
-    sudo zypper addrepo -f https://rpm.releases.hashicorp.com/opensuse/hashicorp.repo
-    sudo zypper refresh
-    sudo zypper install -y terraform
+else
+    echo "Download Terrafrom manually from Hashicorp.com" >> toDo.txt
 fi
 
 # Fetch the latest Bicep CLI binary
@@ -175,7 +172,11 @@ wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesThe
 
 
 # Install Terraform autocomplete
-terraform -install-autocomplete
+if command -v terraform &>/dev/null; then
+    terraform -install-autocomplete
+else
+    echo "Run the following command: terraform -install-autocomplete" >> toDo.txt
+fi
 
 # Install Azure Shell module
 pwsh -Command "Install-Module -Name Az -Repository PSGallery -Force"
