@@ -109,14 +109,12 @@ elif grep -qi "opensuse" /etc/os-release; then
         rm -f libopenssl1_0_0-1.0.2u-security.146.64.x86_64.rpm
     fi
     sudo zypper refresh
-    sudo zypper install libopenssl1_0_0
-    sudo zypper refresh
-    sudo zypper install libicu
+    sudo zypper install -y libicu
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     sudo wget -O /etc/zypp/repos.d/microsoft-prod.repo https://packages.microsoft.com/config/opensuse/15/prod.repo
     sudo zypper refresh
-    sudo zypper install -y clang clang-tools-extra
-    sudo zypper install -y nodejs18 npm18
+    sudo zypper install -y clang
+    sudo zypper install -y nodejs npm
     sudo zypper install -y zsh
     sudo zypper install -y dotnet-sdk-8.0
     sudo zypper install -y aspnetcore-runtime-8.0
