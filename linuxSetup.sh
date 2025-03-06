@@ -159,6 +159,12 @@ else
     echo "Download Terrafrom manually from Hashicorp.com" >> toDo.txt
 fi
 
+if [[ $(grep -i Microsoft /proc/version) ]]; then
+    wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x86.zip
+    unzip win32yank-x86.zip -d ~/UserApps/win32yank
+fi
+
+
 # Fetch the latest Bicep CLI binary
 curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
 chmod +x ./bicep
