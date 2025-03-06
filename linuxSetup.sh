@@ -193,7 +193,7 @@ zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 
 wget https://github.com/zen-browser/desktop/releases/download/1.8.2b/zen.linux-x86_64.tar.xz
-tar -C ~/UserApps -xzf go0.24.0.linux-amd64.tar.gz
+tar -xJf zen.linux-x86_64.tar.xz -C ~/UserApps
 
 # Open Jetbrains for toolbox link
 firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
