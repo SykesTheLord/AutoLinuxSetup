@@ -159,6 +159,8 @@ else
     echo "Download Terrafrom manually from Hashicorp.com" >> toDo.txt
 fi
 
+mkdir UserApps
+
 if [[ $(grep -i Microsoft /proc/version) ]]; then
     wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x86.zip
     unzip win32yank-x86.zip -d ~/UserApps/win32yank
@@ -197,6 +199,7 @@ rm -f installZsh.sh
 # Install Oh-My-Zsh plugins
 zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+
 
 wget https://github.com/zen-browser/desktop/releases/download/1.8.2b/zen.linux-x86_64.tar.xz
 tar -xJf zen.linux-x86_64.tar.xz -C ~/UserApps
