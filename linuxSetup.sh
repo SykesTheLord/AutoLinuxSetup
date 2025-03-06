@@ -208,3 +208,5 @@ tar -xJf zen.linux-x86_64.tar.xz -C ~/UserApps
 firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 
 print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'. If errors occur"
+
+wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash NvimSetup.sh 
