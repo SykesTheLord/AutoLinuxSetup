@@ -102,6 +102,8 @@ source $ZSH/oh-my-zsh.sh
 alias vim="nvim"
 alias upNvim="bash ~/.config/updateNeovimConf.sh"
 
+export PATH=$PATH:~/UserApps/win32yank
+export PATH=$PATH:~/UserApps/terraform
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
