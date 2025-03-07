@@ -162,8 +162,8 @@ fi
 mkdir UserApps
 
 if [[ $(grep -i Microsoft /proc/version) ]]; then
-    wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x86.zip
-    unzip win32yank-x86.zip -d ~/UserApps/win32yank
+    wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
+    unzip win32yank-x64.zip -d ~/UserApps/win32yank
 fi
 
 
