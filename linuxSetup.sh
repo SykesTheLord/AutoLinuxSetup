@@ -35,6 +35,8 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
     sudo apt install -y ripgrep
     sudo apt install -y direnv
+    sudo apt install -y tmux
+    sudo apt install -y fzf
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -62,6 +64,8 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y default-jre openjdk-8-jre openjdk-19-jre npm
     sudo apt install -y ripgrep
     sudo apt install -y direnv
+    sudo apt install -y tmux
+    sudo apt install -y fzf
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -74,6 +78,8 @@ elif [ -f "/etc/arch-release" ]; then
     sudo dotnet tool install --global PowerShell
     sudo pacman -S --noconfirm ripgrep
     sudo pacman -S --noconfirm direnv
+    sudo pacman -S --noconfirm tmux
+    sudo pacman -S --noconfirm fzf
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -92,6 +98,8 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dotnet tool install --global PowerShell
     sudo dnf install -y ripgrep
     sudo dnf install -y direnv
+    sudo dnf install -y tmux
+    sudo dnf install -y fzf
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -124,6 +132,9 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo dotnet tool install --global powershell
     sudo zypper install -y ripgrep
     sudo zypper install -y direnv
+    sudo zypper install -y libgthread-2_0-0
+    sudo zypper install -y tmux
+    sudo zypper install -y fzf
 
 else
     echo "No supported Distro for install found"
@@ -165,6 +176,11 @@ if [[ $(grep -i Microsoft /proc/version) ]]; then
     wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
     unzip win32yank-x64.zip -d ~/UserApps/win32yank
     chmod +x ~/UserApps/win32yank/win32yank.exe
+else
+    wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod a+x ./AM-INSTALLER && ./AM-INSTALLER
+    am -i zen-browser
+    # Open Jetbrains for toolbox link
+    firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 fi
 
 
@@ -176,6 +192,7 @@ sudo mv ./bicep /usr/local/bin/bicep
 # Install and setup Neovim using the local NvimSetup.sh
 wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
 
+wget -O ~/UserApps/tmux-sessionizer/tmux-sessionizer https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/tmux-sessionizer
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
@@ -202,12 +219,15 @@ zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 
 
-wget https://github.com/zen-browser/desktop/releases/download/1.8.2b/zen.linux-x86_64.tar.xz
-tar -xJf zen.linux-x86_64.tar.xz -C ~/UserApps
 
-# Open Jetbrains for toolbox link
-firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
+mkdir ~/Development
+mkdir ~/Development/Personal
+mkdir ~/Development/School
+mkdir ~/Development/Work
 
-print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'. If errors occur"
+echo "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'." >> toDo.txt
+echo "Now create "
 
-wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash NvimSetup.sh 
+print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'."
+
+
