@@ -38,6 +38,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt install -y tmux
     sudo apt install -y fzf
     sudo apt install -y zsh
+    curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -68,6 +69,7 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y tmux
     sudo apt install -y fzf
     sudo apt install -y zsh
+    curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
