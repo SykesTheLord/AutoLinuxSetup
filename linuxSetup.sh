@@ -37,6 +37,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
+    sudo apt install -y zsh
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -66,6 +67,7 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
+    sudo apt install -y zsh
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -204,7 +206,7 @@ wget -O https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/m
 bash NvimSetup.sh
 
 wget -O ~/UserApps/tmux-sessionizer/tmux-sessionizer https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/tmux-sessionizer
-chmod +x UserApps/tmux-sessionizer/tmux-sessionizer
+chmod +x ~/UserApps/tmux-sessionizer/tmux-sessionizer
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
