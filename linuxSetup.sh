@@ -37,6 +37,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -66,6 +67,7 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -80,6 +82,7 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm direnv
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
+    sudo pacman -S --noconfirm ghostty
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -100,6 +103,8 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dnf install -y direnv
     sudo dnf install -y tmux
     sudo dnf install -y fzf
+    sudo dnf copr enable pgdev/ghostty
+    sudo dnf install -y ghostty
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -135,6 +140,7 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y libgthread-2_0-0
     sudo zypper install -y tmux
     sudo zypper install -y fzf
+    sudo zypper install -y ghostty
 
 else
     echo "No supported Distro for install found"
