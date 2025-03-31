@@ -37,7 +37,6 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -67,7 +66,6 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y direnv
     sudo apt install -y tmux
     sudo apt install -y fzf
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
