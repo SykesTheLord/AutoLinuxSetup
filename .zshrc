@@ -105,6 +105,11 @@ alias upNvim="bash ~/.config/updateNeovimConf.sh"
 export PATH=$PATH:~/UserApps/win32yank
 export PATH=$PATH:~/UserApps/terraform
 export PATH=$PATH:~/UserApps/zen
+export PATH=$PATH:~/.dotnet/tools
+export PATH=$PATH:~/UserApps/nuget
+export PATH=$PATH:~/UserApps/tmux-sessionizer
+export PATH=$PATH:~/.dotnet/tools
+export PATH=$PATH:/snap/kubectl/3546
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -113,8 +118,8 @@ export NVM_DIR="$HOME/.nvm"
 # fnm
 FNM_PATH="/home/jasb/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/jasb/.local/share/fnm:$PATH"
-  eval "`fnm env`"
+    export PATH="/home/jasb/.local/share/fnm:$PATH"
+    eval "`fnm env`"
 fi
 
 # Enable direnv

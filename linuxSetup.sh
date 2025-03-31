@@ -180,8 +180,13 @@ else
     wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod a+x ./AM-INSTALLER && ./AM-INSTALLER
     am -i zen-browser
     # Open Jetbrains for toolbox link
-    firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
+    zen-browser https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 fi
+
+
+wget https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.tmux.conf
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 
 
 # Fetch the latest Bicep CLI binary
@@ -190,9 +195,12 @@ chmod +x ./bicep
 sudo mv ./bicep /usr/local/bin/bicep
 
 # Install and setup Neovim using the local NvimSetup.sh
-wget -O- https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh | bash
+wget -O https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh
+
+bash NvimSetup.sh
 
 wget -O ~/UserApps/tmux-sessionizer/tmux-sessionizer https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/tmux-sessionizer
+chmod +x UserApps/tmux-sessionizer/tmux-sessionizer
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
