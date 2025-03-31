@@ -193,18 +193,17 @@ fi
 wget https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-
-
 # Fetch the latest Bicep CLI binary
 curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
 chmod +x ./bicep
 sudo mv ./bicep /usr/local/bin/bicep
 
 # Install and setup Neovim using the local NvimSetup.sh
-wget -O https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh
+wget https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh
 
 bash NvimSetup.sh
 
+mkdir ~/UserApps/tmux-sessionizer/
 wget -O ~/UserApps/tmux-sessionizer/tmux-sessionizer https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/tmux-sessionizer
 chmod +x ~/UserApps/tmux-sessionizer/tmux-sessionizer
 
