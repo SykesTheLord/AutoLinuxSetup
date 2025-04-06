@@ -245,7 +245,9 @@ rm -f installZsh.sh
 zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 
-
+if [[ $"DISTRO" == "Ubuntu" || $"DISTRO" == "Debian" ]]; then
+    echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> ~/.zshrc
+fi
 
 mkdir ~/Development
 mkdir ~/Development/Personal
