@@ -110,6 +110,9 @@ export PATH=$PATH:~/UserApps/nuget
 export PATH=$PATH:~/UserApps/tmux-sessionizer
 export PATH=$PATH:~/.dotnet/tools
 export PATH=$PATH:/snap/kubectl/3546
+export PATH=$PATH:/opt/nvim-linux-x86_64/bin
+export PATH=$PATH:/usr/local/go/bin
+
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
