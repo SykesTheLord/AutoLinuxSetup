@@ -244,7 +244,7 @@ rm -f installZsh.sh
 # Install Oh-My-Zsh plugins
 zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-git clone --depth 1 --filter=blob:none git@github.com:ryanoasis/nerd-fonts ~/nerd-fonts
+git clone --depth 1 --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git ~/nerd-fonts
 chmod +x ~/nerd-fonts/install.sh
 bash ~/nerd-fonts/install.sh -q
 
