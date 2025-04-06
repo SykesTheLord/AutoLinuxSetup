@@ -187,13 +187,17 @@ if [[ $(grep -i Microsoft /proc/version) ]]; then
 else
     wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod a+x ./AM-INSTALLER && ./AM-INSTALLER
     am -i zen-browser
+    if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+        am -i ghostty
+    fi
     # Open Jetbrains for toolbox link
-    zen-browser https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
+    firefox https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
 fi
 
 
-wget https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.tmux.conf
+wget -O ~/.tmux.conf https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+echo "Open tmux and run Ctrl+b+I to install plugins." >> toDo.txt
 
 # Fetch the latest Bicep CLI binary
 curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
@@ -240,8 +244,8 @@ mkdir ~/Development/Personal
 mkdir ~/Development/School
 mkdir ~/Development/Work
 
+echo "Create and setup ssh keys for github." >> toDo.txt
 echo "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'." >> toDo.txt
-echo "Now create "
 
 print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'."
 
