@@ -185,7 +185,15 @@ if [[ $(grep -i Microsoft /proc/version) ]]; then
     unzip win32yank-x64.zip -d ~/UserApps/win32yank
     chmod +x ~/UserApps/win32yank/win32yank.exe
 else
-    wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod a+x ./AM-INSTALLER && ./AM-INSTALLER
+    # Download the installer script
+    wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER -O AM-INSTALLER
+    chmod a+x AM-INSTALLER
+
+    # Modify the script to automate the installation
+    echo "_install_am" >> AM-INSTALLER
+
+    # Execute the modified script
+    ./AM-INSTALLER
     am -i zen-browser
     if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
         am -i ghostty
