@@ -223,6 +223,7 @@ chmod +x ~/UserApps/tmux-sessionizer/tmux-sessionizer
 
 wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
 wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
+wget -O ~/.config/updateAll.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateAll.sh
 
 
 # Install Terraform autocomplete
@@ -255,6 +256,7 @@ mkdir ~/Development/Work
 
 echo "Create and setup ssh keys for github." >> toDo.txt
 echo "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'." >> toDo.txt
+echo "Run 'sudo apt install -y plasma-workspace-wayland' if in Kubuntu." >> toDo.txt
 
 print_message "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'."
 

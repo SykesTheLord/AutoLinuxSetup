@@ -101,6 +101,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vim="nvim"
 alias upNvim="bash ~/.config/updateNeovimConf.sh"
+alias updateAll="bash ~/.config/updateAll.sh"
 
 export PATH=$PATH:~/UserApps/win32yank
 export PATH=$PATH:~/UserApps/terraform
