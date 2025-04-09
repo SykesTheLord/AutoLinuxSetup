@@ -184,6 +184,17 @@ if [[ $(grep -i Microsoft /proc/version) ]]; then
     wget https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
     unzip win32yank-x64.zip -d ~/UserApps/win32yank
     chmod +x ~/UserApps/win32yank/win32yank.exe
+    if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+        # Download the installer script
+        wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER -O AM-INSTALLER
+        chmod a+x AM-INSTALLER
+
+        # Modify the script to automate the installation
+        echo "_install_am" >> AM-INSTALLER
+
+        # Execute the modified script
+        ./AM-INSTALLER
+    fi
 else
     # Download the installer script
     wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER -O AM-INSTALLER
