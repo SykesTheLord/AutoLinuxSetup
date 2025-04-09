@@ -9,9 +9,9 @@ print_message() {
     echo "================================================="
 }
 
-if [[ "$DISTRO" == "Ubuntu" ]]; then
+if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
     # Ubuntu setup
-    print_message "Setting up for Ubuntu"
+    print_message "Setting up for Ubuntu or Ubuntu variant"
     sudo apt update && sudo apt upgrade -y
     sudo apt-get install -y wget apt-transport-https software-properties-common
     sudo apt-get update
@@ -162,7 +162,7 @@ sudo usermod -aG docker $USER
 # Terraform installation
 if [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm terraform
-elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon"]]; then
     wget -O go0.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go0.24.0.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
@@ -195,7 +195,7 @@ else
     # Execute the modified script
     ./AM-INSTALLER
     am -i zen-browser
-    if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+    if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon" ]]; then
         am -i ghostty
     fi
     # Open Jetbrains for toolbox link
