@@ -8,7 +8,7 @@ print_message() {
     echo "================================================="
 }
 
-if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon" ]]; then
     # Ubuntu setup
     print_message "Updating for Debian based"
     sudo apt update && sudo apt upgrade -y
@@ -37,7 +37,7 @@ else
     exit 1
 fi
 
-if [[ $(grep -i Microsoft /proc/version) || "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
+if [[ $(grep -i Microsoft /proc/version) || "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon" ]]; then
     bash ~/.config/updateNeovimConf.sh
     print_message "Completed updates"
 else
