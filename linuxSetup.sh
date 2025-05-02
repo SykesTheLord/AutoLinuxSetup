@@ -162,7 +162,7 @@ sudo usermod -aG docker $USER
 # Terraform installation
 if [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm terraform
-elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon"]]; then
+elif [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" || "$DISTRO" == "Neon" ]]; then
     wget -O go0.24.0.linux-amd64.tar.gz https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go0.24.0.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
