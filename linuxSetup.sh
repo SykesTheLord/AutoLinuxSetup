@@ -9,6 +9,30 @@ print_message() {
     echo "================================================="
 }
 
+#
+# --- PROMPT FOR SWAYWM INSTALLATION (once) ---
+#
+INSTALL_SWAY=false
+
+# If sway already on PATH, we’ll install QtGreet unconditionally later
+if command -v sway &> /dev/null; then
+    INSTALL_SWAY=true
+else
+    # Ask user if they want SwayWM
+    read -p "SwayWM is not installed. Would you like to install SwayWM? [y/N] " sway_choice
+    case "$sway_choice" in
+        [Yy]* ) INSTALL_SWAY=true ;;
+        * ) INSTALL_SWAY=false ;;
+    esac
+fi
+
+if [ "$INSTALL_SWAY" = true ]; then
+    echo "→ Will ensure SwayWM is present, then install QtGreet."
+else
+    echo "→ Skipping SwayWM and QtGreet installation."
+fi
+
+
 if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
     # Ubuntu setup
     print_message "Setting up for Ubuntu or Ubuntu variant"
@@ -39,6 +63,40 @@ if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
     sudo apt install -y fzf
     sudo apt install -y zsh
     curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
+    if [ "$INSTALL_SWAY" = true ]; then
+        # 1) Ensure SwayWM
+        if ! command -v sway &> /dev/null; then
+            echo "Installing SwayWM on Ubuntu…"
+            sudo apt-get update
+            sudo apt-get install -y sway \
+                || { echo "ERROR: could not install sway" >&2; exit 1; }
+        else
+            echo "SwayWM already installed."
+        fi
+
+        # 2) Ensure QtGreet
+        if ! command -v qtgreet &> /dev/null; then
+            echo "Installing QtGreet on Ubuntu…"
+            if sudo apt-get install -y qtgreet; then
+                echo "→ QtGreet installed from apt."
+            else
+                echo "→ QtGreet not in apt, building from source…"
+                sudo apt-get install -y git build-essential meson ninja-build qtbase5-dev \
+                    || { echo "ERROR: missing build deps" >&2; exit 1; }
+                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
+                    || { echo "ERROR: git clone failed" >&2; exit 1; }
+                cd /tmp/QtGreet
+                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                    || { echo "ERROR: meson failed" >&2; exit 1; }
+                ninja -C build && sudo ninja -C build install \
+                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
+                cd ~
+                echo "→ QtGreet built & installed."
+            fi
+        else
+            echo "QtGreet already installed."
+        fi
+    fi
 
 elif [[ "$DISTRO" == "Debian" ]]; then
     # Debian setup
@@ -70,6 +128,40 @@ elif [[ "$DISTRO" == "Debian" ]]; then
     sudo apt install -y fzf
     sudo apt install -y zsh
     curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
+    if [ "$INSTALL_SWAY" = true ]; then
+        # 1) Ensure SwayWM
+        if ! command -v sway &> /dev/null; then
+            echo "Installing SwayWM on Ubuntu…"
+            sudo apt-get update
+            sudo apt-get install -y sway \
+                || { echo "ERROR: could not install sway" >&2; exit 1; }
+        else
+            echo "SwayWM already installed."
+        fi
+
+        # 2) Ensure QtGreet
+        if ! command -v qtgreet &> /dev/null; then
+            echo "Installing QtGreet on Ubuntu…"
+            if sudo apt-get install -y qtgreet; then
+                echo "→ QtGreet installed from apt."
+            else
+                echo "→ QtGreet not in apt, building from source…"
+                sudo apt-get install -y git build-essential meson ninja-build qtbase5-dev \
+                    || { echo "ERROR: missing build deps" >&2; exit 1; }
+                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
+                    || { echo "ERROR: git clone failed" >&2; exit 1; }
+                cd /tmp/QtGreet
+                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                    || { echo "ERROR: meson failed" >&2; exit 1; }
+                ninja -C build && sudo ninja -C build install \
+                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
+                cd ~
+                echo "→ QtGreet built & installed."
+            fi
+        else
+            echo "QtGreet already installed."
+        fi
+    fi
 
 elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
@@ -85,6 +177,37 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
     sudo pacman -S --noconfirm ghostty
+    if [ "$INSTALL_SWAY" = true ]; then
+        if ! command -v sway &> /dev/null; then
+            echo "Installing SwayWM on Arch…"
+            sudo pacman -Syu --noconfirm sway \
+                || { echo "ERROR: pacman could not install sway" >&2; exit 1; }
+        else
+            echo "SwayWM already installed."
+        fi
+
+        if ! command -v qtgreet &> /dev/null; then
+            echo "Installing QtGreet on Arch…"
+            if sudo pacman -S --noconfirm qtgreet; then
+                echo "→ QtGreet installed from pacman."
+            else
+                echo "→ QtGreet not in repo, building from source…"
+                sudo pacman -S --noconfirm git base-devel meson ninja qt5-base \
+                    || { echo "ERROR: missing build deps" >&2; exit 1; }
+                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
+                    || { echo "ERROR: git clone failed" >&2; exit 1; }
+                cd /tmp/QtGreet
+                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                    || { echo "ERROR: meson failed" >&2; exit 1; }
+                ninja -C build && sudo ninja -C build install \
+                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
+                cd ~
+                echo "→ QtGreet built & installed."
+            fi
+        else
+            echo "QtGreet already installed."
+        fi
+    fi
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -107,6 +230,37 @@ elif [ -f "/etc/fedora-release" ]; then
     sudo dnf install -y fzf
     sudo dnf copr enable pgdev/ghostty
     sudo dnf install -y ghostty
+    if [ "$INSTALL_SWAY" = true ]; then
+        if ! command -v sway &> /dev/null; then
+            echo "Installing SwayWM on Fedora…"
+            sudo dnf install -y sway \
+                || { echo "ERROR: dnf could not install sway" >&2; exit 1; }
+        else
+            echo "SwayWM already installed."
+        fi
+
+        if ! command -v qtgreet &> /dev/null; then
+            echo "Installing QtGreet on Fedora…"
+            if sudo dnf install -y qtgreet; then
+                echo "→ QtGreet installed via dnf."
+            else
+                echo "→ QtGreet not in repos, building from source…"
+                sudo dnf install -y git gcc-c++ meson ninja-build qt5-qtbase-devel \
+                    || { echo "ERROR: missing build deps" >&2; exit 1; }
+                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
+                    || { echo "ERROR: git clone failed" >&2; exit 1; }
+                cd /tmp/QtGreet
+                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                    || { echo "ERROR: meson failed" >&2; exit 1; }
+                ninja -C build && sudo ninja -C build install \
+                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
+                cd ~
+                echo "→ QtGreet built & installed."
+            fi
+        else
+            echo "QtGreet already installed."
+        fi
+    fi
 
 elif grep -qi "opensuse" /etc/os-release; then
     # openSUSE setup
@@ -143,6 +297,39 @@ elif grep -qi "opensuse" /etc/os-release; then
     sudo zypper install -y tmux
     sudo zypper install -y fzf
     sudo zypper install -y ghostty
+
+    if [ "$INSTALL_SWAY" = true ]; then
+        if ! command -v sway &> /dev/null; then
+            echo "Installing SwayWM on openSUSE…"
+            sudo zypper install -y sway \
+                || { echo "ERROR: zypper could not install sway" >&2; exit 1; }
+        else
+            echo "SwayWM already installed."
+        fi
+
+        if ! command -v qtgreet &> /dev/null; then
+            echo "Installing QtGreet on openSUSE…"
+            if sudo zypper install -y qtgreet; then
+                echo "→ QtGreet installed via zypper."
+            else
+                echo "→ QtGreet not in repos, building from source…"
+                sudo zypper install -y git gcc-c++ meson ninja qt5-qtbase-devel \
+                    || { echo "ERROR: missing build deps" >&2; exit 1; }
+                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
+                    || { echo "ERROR: git clone failed" >&2; exit 1; }
+                cd /tmp/QtGreet
+                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                    || { echo "ERROR: meson failed" >&2; exit 1; }
+                ninja -C build && sudo ninja -C build install \
+                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
+                cd ~
+                echo "→ QtGreet built & installed."
+            fi
+        else
+            echo "QtGreet already installed."
+        fi
+    fi
+
 
 else
     echo "No supported Distro for install found"
