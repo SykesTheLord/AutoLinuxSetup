@@ -78,13 +78,14 @@ if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
         if ! command -v qtgreet &> /dev/null; then
             echo "QtGreet not found, building from source (including dependencies)…"
 
-            # 1) Install build tools & dev libs
+            # 1) Install build tools & Qt6/Wayland dev libraries
             sudo apt-get update
             sudo apt-get install -y \
                 git build-essential meson ninja-build pkg-config \
-                qtbase5-dev qtdeclarative5-dev libqt5waylandclient5-dev \
-                libwayland-dev libx11-dev libxcb-composite0-dev libxkbcommon-dev \
-                libelogind-dev libpam0g-dev \
+                qt6-base-dev qt6-base-private-dev qt6-declarative-dev \
+                qt6-wayland-dev qt6-wayland-dev-tools \
+                libwayland-dev libx11-dev libxcb1-dev libxkbcommon-dev \
+                libpam0g-dev \
                 || { echo "ERROR: could not install build deps" >&2; exit 1; }
 
             # 2) Clone & build each DFL framework + WayQt
