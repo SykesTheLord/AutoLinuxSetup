@@ -76,23 +76,46 @@ if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
 
         # 2) Ensure QtGreet
         if ! command -v qtgreet &> /dev/null; then
-            echo "Installing QtGreet on Ubuntu…"
-            if sudo apt-get install -y qtgreet; then
-                echo "→ QtGreet installed from apt."
-            else
-                echo "→ QtGreet not in apt, building from source…"
-                sudo apt-get install -y git build-essential meson ninja-build qtbase5-dev \
-                    || { echo "ERROR: missing build deps" >&2; exit 1; }
-                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
-                    || { echo "ERROR: git clone failed" >&2; exit 1; }
-                cd /tmp/QtGreet
-                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                    || { echo "ERROR: meson failed" >&2; exit 1; }
+            echo "QtGreet not found, building from source (including dependencies)…"
+
+            # 1) Install build tools & dev libs
+            sudo apt-get update
+            sudo apt-get install -y \
+                git build-essential meson ninja-build pkg-config \
+                qtbase5-dev qtdeclarative5-dev libqt5waylandclient5-dev \
+                libwayland-dev libx11-dev libxcb-composite0-dev libxkbcommon-dev \
+                libelogind-dev libpam0g-dev \
+                || { echo "ERROR: could not install build deps" >&2; exit 1; }
+
+            # 2) Clone & build each DFL framework + WayQt
+            DEPS=(
+                "https://gitlab.com/desktop-frameworks/wayqt.git"
+                "https://gitlab.com/desktop-frameworks/applications.git"
+                "https://gitlab.com/desktop-frameworks/ipc.git"
+                "https://gitlab.com/desktop-frameworks/utils.git"
+                "https://gitlab.com/desktop-frameworks/login1.git"
+            )
+            for repo in "${DEPS[@]}"; do
+                name=$(basename -s .git "$repo")
+                echo "→ Building dependency: $name"
+                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
+                cd "/tmp/$name"
+                meson setup build --prefix=/usr --buildtype=release \
+                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
                 ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
-                cd ~
-                echo "→ QtGreet built & installed."
-            fi
+                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
+            done
+
+            # 3) Clone & build QtGreet
+            echo "→ Building QtGreet"
+            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
+            cd /tmp/QtGreet
+            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
+            ninja -C build && sudo ninja -C build install \
+                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
+            cd ~
+            echo "→ QtGreet built & installed from source."
         else
             echo "QtGreet already installed."
         fi
@@ -141,23 +164,46 @@ elif [[ "$DISTRO" == "Debian" ]]; then
 
         # 2) Ensure QtGreet
         if ! command -v qtgreet &> /dev/null; then
-            echo "Installing QtGreet on Ubuntu…"
-            if sudo apt-get install -y qtgreet; then
-                echo "→ QtGreet installed from apt."
-            else
-                echo "→ QtGreet not in apt, building from source…"
-                sudo apt-get install -y git build-essential meson ninja-build qtbase5-dev \
-                    || { echo "ERROR: missing build deps" >&2; exit 1; }
-                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
-                    || { echo "ERROR: git clone failed" >&2; exit 1; }
-                cd /tmp/QtGreet
-                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                    || { echo "ERROR: meson failed" >&2; exit 1; }
+            echo "QtGreet not found, building from source (including dependencies)…"
+
+            # 1) Install build tools & dev libs
+            sudo apt-get update
+            sudo apt-get install -y \
+                git build-essential meson ninja-build pkg-config \
+                qtbase5-dev qtdeclarative5-dev libqt5waylandclient5-dev \
+                libwayland-dev libx11-dev libxcb-composite0-dev libxkbcommon-dev \
+                libelogind-dev libpam0g-dev \
+                || { echo "ERROR: could not install build deps" >&2; exit 1; }
+
+            # 2) Clone & build each DFL framework + WayQt
+            DEPS=(
+                "https://gitlab.com/desktop-frameworks/wayqt.git"
+                "https://gitlab.com/desktop-frameworks/applications.git"
+                "https://gitlab.com/desktop-frameworks/ipc.git"
+                "https://gitlab.com/desktop-frameworks/utils.git"
+                "https://gitlab.com/desktop-frameworks/login1.git"
+            )
+            for repo in "${DEPS[@]}"; do
+                name=$(basename -s .git "$repo")
+                echo "→ Building dependency: $name"
+                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
+                cd "/tmp/$name"
+                meson setup build --prefix=/usr --buildtype=release \
+                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
                 ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
-                cd ~
-                echo "→ QtGreet built & installed."
-            fi
+                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
+            done
+
+            # 3) Clone & build QtGreet
+            echo "→ Building QtGreet"
+            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
+            cd /tmp/QtGreet
+            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
+            ninja -C build && sudo ninja -C build install \
+                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
+            cd ~
+            echo "→ QtGreet built & installed from source."
         else
             echo "QtGreet already installed."
         fi
@@ -187,23 +233,45 @@ elif [ -f "/etc/arch-release" ]; then
         fi
 
         if ! command -v qtgreet &> /dev/null; then
-            echo "Installing QtGreet on Arch…"
-            if sudo pacman -S --noconfirm qtgreet; then
-                echo "→ QtGreet installed from pacman."
-            else
-                echo "→ QtGreet not in repo, building from source…"
-                sudo pacman -S --noconfirm git base-devel meson ninja qt5-base \
-                    || { echo "ERROR: missing build deps" >&2; exit 1; }
-                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
-                    || { echo "ERROR: git clone failed" >&2; exit 1; }
-                cd /tmp/QtGreet
-                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                    || { echo "ERROR: meson failed" >&2; exit 1; }
+            echo "QtGreet not found, building from source (including dependencies)…"
+
+            # 1) Install build tools & dev libs
+            sudo pacman -Sy --noconfirm \
+                git base-devel meson ninja pkgconf \
+                qt5-base qt5-declarative qt5-wayland \
+                wayland-devel libx11-devel xcb-util-devel libxkbcommon-devel \
+                elogind pam \
+                || { echo "ERROR: could not install build deps" >&2; exit 1; }
+
+            # 2) Clone & build DFL frameworks + WayQt
+            DEPS=(
+                "https://gitlab.com/desktop-frameworks/wayqt.git"
+                "https://gitlab.com/desktop-frameworks/applications.git"
+                "https://gitlab.com/desktop-frameworks/ipc.git"
+                "https://gitlab.com/desktop-frameworks/utils.git"
+                "https://gitlab.com/desktop-frameworks/login1.git"
+            )
+            for repo in "${DEPS[@]}"; do
+                name=$(basename -s .git "$repo")
+                echo "→ Building dependency: $name"
+                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
+                cd "/tmp/$name"
+                meson setup build --prefix=/usr --buildtype=release \
+                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
                 ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
-                cd ~
-                echo "→ QtGreet built & installed."
-            fi
+                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
+            done
+
+            # 3) Clone & build QtGreet
+            echo "→ Building QtGreet"
+            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
+            cd /tmp/QtGreet
+            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
+            ninja -C build && sudo ninja -C build install \
+                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
+            cd ~
+            echo "→ QtGreet built & installed from source."
         else
             echo "QtGreet already installed."
         fi
@@ -240,23 +308,45 @@ elif [ -f "/etc/fedora-release" ]; then
         fi
 
         if ! command -v qtgreet &> /dev/null; then
-            echo "Installing QtGreet on Fedora…"
-            if sudo dnf install -y qtgreet; then
-                echo "→ QtGreet installed via dnf."
-            else
-                echo "→ QtGreet not in repos, building from source…"
-                sudo dnf install -y git gcc-c++ meson ninja-build qt5-qtbase-devel \
-                    || { echo "ERROR: missing build deps" >&2; exit 1; }
-                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
-                    || { echo "ERROR: git clone failed" >&2; exit 1; }
-                cd /tmp/QtGreet
-                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                    || { echo "ERROR: meson failed" >&2; exit 1; }
+            echo "QtGreet not found, building from source (including dependencies)…"
+
+            # 1) Install build tools & dev libs
+            sudo dnf install -y \
+                git @development-tools meson ninja-build pkgconf-pkg-config \
+                qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtwayland-devel \
+                wayland-devel libX11-devel xcb-util-devel libxkbcommon-devel \
+                elogind-devel pam-devel \
+                || { echo "ERROR: could not install build deps" >&2; exit 1; }
+
+            # 2) Clone & build DFL frameworks + WayQt
+            DEPS=(
+                "https://gitlab.com/desktop-frameworks/wayqt.git"
+                "https://gitlab.com/desktop-frameworks/applications.git"
+                "https://gitlab.com/desktop-frameworks/ipc.git"
+                "https://gitlab.com/desktop-frameworks/utils.git"
+                "https://gitlab.com/desktop-frameworks/login1.git"
+            )
+            for repo in "${DEPS[@]}"; do
+                name=$(basename -s .git "$repo")
+                echo "→ Building dependency: $name"
+                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
+                cd "/tmp/$name"
+                meson setup build --prefix=/usr --buildtype=release \
+                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
                 ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
-                cd ~
-                echo "→ QtGreet built & installed."
-            fi
+                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
+            done
+
+            # 3) Clone & build QtGreet
+            echo "→ Building QtGreet"
+            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
+            cd /tmp/QtGreet
+            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
+            ninja -C build && sudo ninja -C build install \
+                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
+            cd ~
+            echo "→ QtGreet built & installed from source."
         else
             echo "QtGreet already installed."
         fi
@@ -308,23 +398,45 @@ elif grep -qi "opensuse" /etc/os-release; then
         fi
 
         if ! command -v qtgreet &> /dev/null; then
-            echo "Installing QtGreet on openSUSE…"
-            if sudo zypper install -y qtgreet; then
-                echo "→ QtGreet installed via zypper."
-            else
-                echo "→ QtGreet not in repos, building from source…"
-                sudo zypper install -y git gcc-c++ meson ninja qt5-qtbase-devel \
-                    || { echo "ERROR: missing build deps" >&2; exit 1; }
-                git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet \
-                    || { echo "ERROR: git clone failed" >&2; exit 1; }
-                cd /tmp/QtGreet
-                meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                    || { echo "ERROR: meson failed" >&2; exit 1; }
+            echo "QtGreet not found, building from source (including dependencies)…"
+
+            # 1) Install build tools & dev libs
+            sudo zypper install -y \
+                git patterns-devel_basis-devel_C_C++ meson ninja pkg-config \
+                libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtwayland-devel \
+                wayland-devel libX11-devel libxcb-devel libxkbcommon-devel \
+                libelogind-devel libpam-devel \
+                || { echo "ERROR: could not install build deps" >&2; exit 1; }
+
+            # 2) Clone & build DFL frameworks + WayQt
+            DEPS=(
+                "https://gitlab.com/desktop-frameworks/wayqt.git"
+                "https://gitlab.com/desktop-frameworks/applications.git"
+                "https://gitlab.com/desktop-frameworks/ipc.git"
+                "https://gitlab.com/desktop-frameworks/utils.git"
+                "https://gitlab.com/desktop-frameworks/login1.git"
+            )
+            for repo in "${DEPS[@]}"; do
+                name=$(basename -s .git "$repo")
+                echo "→ Building dependency: $name"
+                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
+                cd "/tmp/$name"
+                meson setup build --prefix=/usr --buildtype=release \
+                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
                 ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: ninja install failed" >&2; exit 1; }
-                cd ~
-                echo "→ QtGreet built & installed."
-            fi
+                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
+            done
+
+            # 3) Clone & build QtGreet
+            echo "→ Building QtGreet"
+            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
+            cd /tmp/QtGreet
+            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
+                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
+            ninja -C build && sudo ninja -C build install \
+                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
+            cd ~
+            echo "→ QtGreet built & installed from source."
         else
             echo "QtGreet already installed."
         fi
