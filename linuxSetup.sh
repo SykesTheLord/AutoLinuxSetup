@@ -62,6 +62,8 @@ if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
     sudo apt install -y tmux
     sudo apt install -y fzf
     sudo apt install -y zsh
+    wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.42.0/fastfetch-linux-amd64.deb
+    sudo apt install -y ./fastfetch-linux-amd64.deb
     curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
     if [ "$INSTALL_SWAY" = true ]; then
         # 1) Ensure SwayWM
@@ -214,6 +216,21 @@ elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
     print_message "Setting up for Arch"
     sudo pacman -Syu --noconfirm
+    if ! command -v yay &> /dev/null; then
+        cd /opt
+        git clone https://aur.archlinux.org/yay-bin.git
+        cd yay-bin
+        sudo pacman -S base-devel
+        makepkg -si
+        cd ~/
+    fi
+
+    INSTALL_HYPRLAND= false
+    read -p "Hyprland is not installed. Would you like to install Hyprland? [y/N] " sway_choice
+    case "$sway_choice" in
+        [Yy]* ) INSTALL_HYPRLAND=true ;;
+        * ) INSTALL_HYPRLAND=false ;;
+    esac
     sudo pacman -S --noconfirm zsh docker docker-compose
     sudo systemctl enable docker.service
     sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
@@ -224,6 +241,31 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
     sudo pacman -S --noconfirm ghostty
+
+
+    if lspci | grep -qi nvidia; then
+        print_message "NVIDIA GPU detected. Installing drivers..."
+
+        # Synchronize package databases and install the NVIDIA DKMS driver
+        sudo pacman -Syu --noconfirm nvidia-dkms
+
+        print_message "nvidia-dkms installation complete."
+    fi
+
+    if [ "$INSTALL_HYPRLAND" = true ]; then
+        if ! command -v hyprland &> /dev/null; then
+            print_message "Installing Hyprland"
+            yay -S hyprland-git
+            pacman -S --noconfirm uwsm
+            # Install required programs
+            sudo pacman -S --noconfirm swaync wireplumber pipewire qt6-wayland qt5-wayland
+            # Enable services
+            sudo systemctl enable swaync
+            yay -S xdg-desktop-portal-hyprland-git
+            # Get hyprland setup from dotfiles repo
+        fi
+    fi
+
     if [ "$INSTALL_SWAY" = true ]; then
         if ! command -v sway &> /dev/null; then
             echo "Installing SwayWM on Arch…"
@@ -351,6 +393,16 @@ elif [ -f "/etc/fedora-release" ]; then
         else
             echo "QtGreet already installed."
         fi
+    fi
+    if lspci | grep -qi nvidia; then
+        print_message "NVIDIA GPU detected. Installing drivers..."
+
+        # Update system and install the akmod-nvidia driver from RPM Fusion
+        sudo dnf update -y
+        sudo dnf install -y akmod-nvidia
+        sudo dnf install xorg-x11-drv-nvidia-cuda
+
+        print_message "akmod-nvidia installation complete. Wait a few minutes for the kernel module to build."
     fi
 
 elif grep -qi "opensuse" /etc/os-release; then

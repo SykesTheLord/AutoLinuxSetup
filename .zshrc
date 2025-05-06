@@ -128,3 +128,8 @@ fi
 
 # Enable direnv
 eval "$(direnv hook zsh)"
+
+# Run Fastfetch on start
+if [[ $- == *i* ]] && command -v fastfetch &>/dev/null; then
+    fastfetch
+fi
