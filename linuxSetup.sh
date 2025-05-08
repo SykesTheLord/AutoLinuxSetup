@@ -216,6 +216,7 @@ elif [ -f "/etc/arch-release" ]; then
     # Arch Linux setup
     print_message "Setting up for Arch"
     sudo pacman -Syu --noconfirm
+    sudo pacman -S --noconfirm git
     if ! command -v yay &> /dev/null; then
         cd /opt
         git clone https://aur.archlinux.org/yay-bin.git
@@ -241,6 +242,7 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
     sudo pacman -S --noconfirm ghostty
+    
 
 
     if lspci | grep -qi nvidia; then
