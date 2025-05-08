@@ -237,12 +237,13 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
     sleep 10
     sudo dotnet tool install --global PowerShell
+    yay -S powershell-git
     sudo pacman -S --noconfirm ripgrep
     sudo pacman -S --noconfirm direnv
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
     sudo pacman -S --noconfirm ghostty
-    
+
 
 
     if lspci | grep -qi nvidia; then
@@ -257,10 +258,10 @@ elif [ -f "/etc/arch-release" ]; then
     if [ "$INSTALL_HYPRLAND" = true ]; then
         if ! command -v hyprland &> /dev/null; then
             print_message "Installing Hyprland"
+            # Install required programs
+            sudo pacman -S --noconfirm swaync wireplumber pipewire qt6-wayland qt5-wayland kitty
             yay -S hyprland-git
             pacman -S --noconfirm uwsm
-            # Install required programs
-            sudo pacman -S --noconfirm swaync wireplumber pipewire qt6-wayland qt5-wayland
             # Enable services
             sudo systemctl enable swaync
             yay -S xdg-desktop-portal-hyprland-git
