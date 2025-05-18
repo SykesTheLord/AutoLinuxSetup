@@ -226,11 +226,11 @@ elif [ -f "/etc/arch-release" ]; then
         cd ~/
     fi
 
-    INSTALL_HYPRLAND= false
-    read -p "Hyprland is not installed. Would you like to install Hyprland? [y/N] " sway_choice
-    case "$sway_choice" in
-        [Yy]* ) INSTALL_HYPRLAND=true ;;
-        * ) INSTALL_HYPRLAND=false ;;
+    INSTALL_DESKTOPENV= false
+    read -p "Should this be installed for desktop environment? [y/N] " de_choice
+    case "$de_choice" in
+        [Yy]* ) INSTALL_DESKTOPENV=true ;;
+        * ) INSTALL_DESKTOPENV=false ;;
     esac
     sudo pacman -S --noconfirm zsh docker docker-compose
     sudo systemctl enable docker.service
@@ -242,8 +242,6 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -S --noconfirm direnv
     sudo pacman -S --noconfirm tmux
     sudo pacman -S --noconfirm fzf
-    sudo pacman -S --noconfirm ghostty
-
 
 
     if lspci | grep -qi nvidia; then
@@ -255,83 +253,12 @@ elif [ -f "/etc/arch-release" ]; then
         print_message "nvidia-dkms installation complete."
     fi
 
-    if [ "$INSTALL_HYPRLAND" = true ]; then
+    if [ "$INSTALL_DESKTOPENV" = true ]; then
         if ! command -v hyprland &> /dev/null; then
             print_message "Installing Hyprland"
             # Install required programs
-            sudo pacman -S --noconfirm swaync wireplumber pipewire qt6-wayland qt5-wayland kitty wl-clipboard gnome-keyring libsecret slurp grim imagemagick swappy
-            yay -S hyprland-git
-            yay -S hyprlock-git
-            yay -S hyprpaper-git
-            yay -S hypridle-git
-            yay -S fastfetch
-            yay -S wofi
-            yay -S waybar
-            yay -S brightnessctl
-            pacman -S --noconfirm uwsm
-            # Enable services
-            sudo systemctl enable swaync
-            yay -S xdg-desktop-portal-hyprland-git
-            # Get hyprland setup from dotfiles repo
-            git clone https://github.com/SykesTheLord/DotFiles.git
-            cd DotFiles
-            cd arch
-            cp .config ~/.config
-            cp .scripts ~/.scripts
-        fi
-    fi
-
-    if [ "$INSTALL_SWAY" = true ]; then
-        if ! command -v sway &> /dev/null; then
-            echo "Installing SwayWM on Arch…"
-            sudo pacman -Syu --noconfirm sway \
-                || { echo "ERROR: pacman could not install sway" >&2; exit 1; }
-        else
-            echo "SwayWM already installed."
-        fi
-
-        if ! command -v qtgreet &> /dev/null; then
-            echo "QtGreet not found, building from source (including dependencies)…"
-
-            # 1) Install build tools & dev libs
-            sudo pacman -Sy --noconfirm \
-                git base-devel meson ninja pkgconf \
-                qt5-base qt5-declarative qt5-wayland \
-                wayland-devel libx11-devel xcb-util-devel libxkbcommon-devel \
-                elogind pam \
-                || { echo "ERROR: could not install build deps" >&2; exit 1; }
-
-            # 2) Clone & build DFL frameworks + WayQt
-            DEPS=(
-                "https://gitlab.com/desktop-frameworks/wayqt.git"
-                "https://gitlab.com/desktop-frameworks/applications.git"
-                "https://gitlab.com/desktop-frameworks/ipc.git"
-                "https://gitlab.com/desktop-frameworks/utils.git"
-                "https://gitlab.com/desktop-frameworks/login1.git"
-            )
-            for repo in "${DEPS[@]}"; do
-                name=$(basename -s .git "$repo")
-                echo "→ Building dependency: $name"
-                [ -d "/tmp/$name" ] || git clone "$repo" "/tmp/$name"
-                cd "/tmp/$name"
-                meson setup build --prefix=/usr --buildtype=release \
-                    || { echo "ERROR: meson setup failed for $name" >&2; exit 1; }
-                ninja -C build && sudo ninja -C build install \
-                    || { echo "ERROR: building/installing $name failed" >&2; exit 1; }
-            done
-
-            # 3) Clone & build QtGreet
-            echo "→ Building QtGreet"
-            [ -d /tmp/QtGreet ] || git clone https://gitlab.com/marcusbritanicus/QtGreet.git /tmp/QtGreet
-            cd /tmp/QtGreet
-            meson setup build --prefix=/usr --buildtype=release -Dbuild_greetwl=false \
-                || { echo "ERROR: meson setup failed for QtGreet" >&2; exit 1; }
-            ninja -C build && sudo ninja -C build install \
-                || { echo "ERROR: building/installing QtGreet failed" >&2; exit 1; }
-            cd ~
-            echo "→ QtGreet built & installed from source."
-        else
-            echo "QtGreet already installed."
+            wget https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/archDesktopInstall.sh
+            bash archDesktopInstall.sh
         fi
     fi
 
