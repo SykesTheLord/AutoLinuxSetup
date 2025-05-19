@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="aussiegeek"
+ZSH_THEME="sykes_custom_theme"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -113,7 +113,7 @@ export PATH=$PATH:~/.dotnet/tools
 export PATH=$PATH:/snap/kubectl/3546
 export PATH=$PATH:/opt/nvim-linux-x86_64/bin
 export PATH=$PATH:/usr/local/go/bin
-
+export PATH=$PATH:~/UserApps/eww
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -133,3 +133,6 @@ eval "$(direnv hook zsh)"
 if [[ $- == *i* ]] && command -v fastfetch &>/dev/null; then
     fastfetch
 fi
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform

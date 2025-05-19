@@ -16,9 +16,7 @@ yay -S xdg-desktop-portal-hyprland-git
 git clone https://github.com/SykesTheLord/DotFiles.git
 cd DotFiles
 cd arch
-cp .config ~/.config
-cp .scripts ~/.scripts
-
+cp -r * ~/
 
 yay -S QGtk3Style
 yay -S themix-full-git
@@ -29,4 +27,5 @@ yay -S hyprcursor
 yay -S wlogout
 yay -S vmware-keymaps
 yay -S vmware-workstation
-
+yay -S nordzy-hyprcursors
+yay -S nordzy-cursors
