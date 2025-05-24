@@ -218,7 +218,7 @@ elif [ -f "/etc/arch-release" ]; then
     sudo pacman -Syu --noconfirm
     sudo pacman -S --noconfirm git
     if ! command -v yay &> /dev/null; then
-        sudo chown -R $USER:$USER
+        sudo chown -R $USER:$USER /opt
         cd /opt
         git clone https://aur.archlinux.org/yay-bin.git
         cd yay-bin
