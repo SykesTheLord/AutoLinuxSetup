@@ -9,29 +9,40 @@ print_message() {
     echo "================================================="
 }
 
-#
-# --- PROMPT FOR SWAYWM INSTALLATION (once) ---
-#
-INSTALL_SWAY=false
 
-# If sway already on PATH, we’ll install QtGreet unconditionally later
-if command -v sway &> /dev/null; then
-    INSTALL_SWAY=true
-else
-    # Ask user if they want SwayWM
-    read -p "SwayWM is not installed. Would you like to install SwayWM? [y/N] " sway_choice
-    case "$sway_choice" in
-        [Yy]* ) INSTALL_SWAY=true ;;
-        * ) INSTALL_SWAY=false ;;
-    esac
+INSTALL_DESKTOPENV= false
+read -p "Should this be installed for desktop environment? [y/N] " de_choice
+case "$de_choice" in
+    [Yy]* ) INSTALL_DESKTOPENV=true ;;
+    * ) INSTALL_DESKTOPENV=false ;;
+esac
+
+
+if [[ "$INSTALL_DESKTOPENV" == true && -f "/etc/arch-release" ]]; then
+
+    #
+    # --- PROMPT FOR SWAYWM INSTALLATION (once) ---
+    #
+    INSTALL_SWAY=false
+
+    # If sway already on PATH, we’ll install QtGreet unconditionally later
+    if command -v sway &> /dev/null; then
+        INSTALL_SWAY=true
+    else
+        # Ask user if they want SwayWM
+        read -p "SwayWM is not installed. Would you like to install SwayWM? [y/N] " sway_choice
+        case "$sway_choice" in
+            [Yy]* ) INSTALL_SWAY=true ;;
+            * ) INSTALL_SWAY=false ;;
+        esac
+    fi
+
+    if [ "$INSTALL_SWAY" = true ]; then
+        echo "→ Will ensure SwayWM is present, then install QtGreet."
+    else
+        echo "→ Skipping SwayWM and QtGreet installation."
+    fi
 fi
-
-if [ "$INSTALL_SWAY" = true ]; then
-    echo "→ Will ensure SwayWM is present, then install QtGreet."
-else
-    echo "→ Skipping SwayWM and QtGreet installation."
-fi
-
 
 if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Neon" ]]; then
     # Ubuntu setup
@@ -227,12 +238,6 @@ elif [ -f "/etc/arch-release" ]; then
         cd ~/
     fi
 
-    INSTALL_DESKTOPENV= false
-    read -p "Should this be installed for desktop environment? [y/N] " de_choice
-    case "$de_choice" in
-        [Yy]* ) INSTALL_DESKTOPENV=true ;;
-        * ) INSTALL_DESKTOPENV=false ;;
-    esac
     sudo pacman -S --noconfirm zsh docker docker-compose
     sudo systemctl enable docker.service
     sudo pacman -S --noconfirm dotnet-runtime-8.0 dotnet-sdk-8.0
@@ -262,6 +267,8 @@ elif [ -f "/etc/arch-release" ]; then
             bash archDesktopInstall.sh
         fi
     fi
+
+
 
 elif [ -f "/etc/fedora-release" ]; then
     # Fedora setup
@@ -482,11 +489,8 @@ if [[ $(grep -i Microsoft /proc/version) ]]; then
     if [[ "$DISTRO" == "Ubuntu" || "$DISTRO" == "Debian" ]]; then
         # Download the installer script
         wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER -O AM-INSTALLER
+
         chmod a+x AM-INSTALLER
-
-        # Modify the script to automate the installation
-        echo "_install_am" >> AM-INSTALLER
-
         # Execute the modified script
         ./AM-INSTALLER
     fi
@@ -494,9 +498,6 @@ else
     # Download the installer script
     wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER -O AM-INSTALLER
     chmod a+x AM-INSTALLER
-
-    # Modify the script to automate the installation
-    echo "_install_am" >> AM-INSTALLER
 
     # Execute the modified script
     ./AM-INSTALLER
@@ -509,7 +510,6 @@ else
 fi
 
 
-wget -O ~/.tmux.conf https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo "Open tmux and run Ctrl+b+I to install plugins." >> toDo.txt
 
@@ -522,15 +522,6 @@ sudo mv ./bicep /usr/local/bin/bicep
 wget https://raw.githubusercontent.com/SykesTheLord/NeoVimConfig/refs/heads/main/NvimSetup.sh
 
 bash NvimSetup.sh
-
-mkdir ~/UserApps/tmux-sessionizer/
-wget -O ~/UserApps/tmux-sessionizer/tmux-sessionizer https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/tmux-sessionizer
-chmod +x ~/UserApps/tmux-sessionizer/tmux-sessionizer
-
-wget -O ~/.zshrc https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/.zshrc
-wget -O ~/.config/updateNeovimConf.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateNeovimConf.sh
-wget -O ~/.config/updateAll.sh https://raw.githubusercontent.com/SykesTheLord/AutoLinuxSetup/refs/heads/main/updateAll.sh
-
 
 # Install Terraform autocomplete
 if command -v terraform &>/dev/null; then
@@ -553,12 +544,18 @@ zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH
 zsh -c "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 git clone --depth 1 --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git ~/nerd-fonts
 chmod +x ~/nerd-fonts/install.sh
-bash ~/nerd-fonts/install.sh -q
+cd
+sudo ./nerd-fonts/install.sh -q -S
 
 mkdir ~/Development
 mkdir ~/Development/Personal
 mkdir ~/Development/School
 mkdir ~/Development/Work
+
+git clone https://github.com/SykesTheLord/DotFiles.git
+cd DotFiles
+python3 installDotfiles.py
+cd
 
 echo "Create and setup ssh keys for github." >> toDo.txt
 echo "Now run 'sudo chsh $USER' if on Fedora, otherwise run 'chsh -s \$(which zsh)'." >> toDo.txt

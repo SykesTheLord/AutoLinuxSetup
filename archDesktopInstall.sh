@@ -12,11 +12,6 @@ pacman -S --noconfirm uwsm
 # Enable services
 sudo systemctl enable swaync
 yay -S --noconfirm xdg-desktop-portal-hyprland-git
-# Get hyprland setup from dotfiles repo
-git clone https://github.com/SykesTheLord/DotFiles.git
-cd DotFiles
-cd arch
-cp -r * ~/
 
 yay -S --noconfirm QGtk3Style
 yay -S --noconfirm themix-full-git
@@ -27,5 +22,3 @@ yay -S --noconfirm hyprcursor
 yay -S --noconfirm wlogout
 yay -S --noconfirm vmware-keymaps
 yay -S --noconfirm vmware-workstation
-yay -S --noconfirm nordzy-hyprcursors
-yay -S --noconfirm nordzy-cursors
